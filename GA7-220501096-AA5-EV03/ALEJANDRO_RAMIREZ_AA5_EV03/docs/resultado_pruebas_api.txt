@@ -1,0 +1,42 @@
+Pruebas de integración API — Hotel Gran Marques
+Fecha: 2026-10-19T03:45:21.658Z
+Total: 36
+Aprobadas: 36
+Fallidas: 0
+
+PASS | Estado de API | GET /api/health | Servicio disponible.
+PASS | Respuesta de salud incluye success=true |   | 
+PASS | Login administración demo | POST /api/auth/login | Autenticación satisfactoria.
+PASS | El login de administración devuelve token |   | 
+PASS | Consultar perfil con token | GET /api/auth/me | Perfil consultado.
+PASS | El perfil tiene rol administrativo |   | 
+PASS | Registrar usuario API | POST /api/auth/register | Usuario registrado satisfactoriamente.
+PASS | Iniciar sesión usuario recién registrado | POST /api/auth/login | Autenticación satisfactoria.
+PASS | El usuario registrado obtiene token |   | 
+PASS | Rechazar contraseña incorrecta | POST /api/auth/login | Error en la autenticación.
+PASS | Crear huésped | POST /api/guests | Huésped creado.
+PASS | El huésped creado tiene identificador |   | 
+PASS | Buscar huésped por documento | GET /api/guests?q=1792381521309_5072 | Huéspedes consultados.
+PASS | La búsqueda devuelve el huésped nuevo |   | 
+PASS | Consultar catálogo de habitaciones | GET /api/rooms | Habitaciones consultadas.
+PASS | El catálogo contiene habitación disponible |   | 
+PASS | Crear reserva | POST /api/reservations | Reserva creada.
+PASS | La reserva calcula las noches |   | 
+PASS | Evitar reserva duplicada en mismo rango | POST /api/reservations | La habitación ya tiene una reserva para ese rango de fechas.
+PASS | Consultar reserva por identificador | GET /api/reservations/1ed28b63-a9a5-4fea-824e-daf0b2580487 | Operación realizada correctamente.
+PASS | Consultar servicios adicionales | GET /api/services?active=true | Servicios consultados.
+PASS | Existe servicio adicional activo |   | 
+PASS | Agregar consumo a reserva | POST /api/reservations/1ed28b63-a9a5-4fea-824e-daf0b2580487/services | Servicio agregado a la reserva.
+PASS | El consumo queda vinculado a la reserva |   | 
+PASS | Generar factura desde reserva | POST /api/invoices | Factura generada desde la reserva.
+PASS | La factura tiene total positivo |   | 
+PASS | Evitar dos facturas para la misma reserva | POST /api/invoices | La reserva ya tiene una factura.
+PASS | Registrar abono parcial | POST /api/invoices/49fe13eb-224c-43d8-9526-0d168433fca4/payments | Pago registrado.
+PASS | El abono deja estado parcial cuando corresponde |   | 
+PASS | Crear solicitud de mantenimiento | POST /api/maintenance | Solicitud de mantenimiento creada.
+PASS | Actualizar estado de mantenimiento | PATCH /api/maintenance/9c5df20c-2cd9-44f8-b4ff-3fdaf73a6810 | Solicitud de mantenimiento actualizada.
+PASS | Consultar resumen gerencial | GET /api/reports/summary | Resumen gerencial generado.
+PASS | El reporte contiene indicadores |   | 
+PASS | Bloquear creación de habitaciones a recepción | POST /api/rooms | Solo administración puede crear habitaciones.
+PASS | Crear habitación con administración | POST /api/rooms | Habitación creada.
+PASS | Rechazar acceso sin token | GET /api/guests | Se requiere Authorization: Bearer <token>.

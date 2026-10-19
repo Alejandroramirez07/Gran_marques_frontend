@@ -1,0 +1,64 @@
+HOTEL GRAN MARQUES — CATÁLOGO DE ENDPOINTS
+Evidencia GA7-220501096-AA5-EV03
+Base URL local: http://localhost:3000
+Autenticación protegida: Authorization: Bearer <token>
+
+SISTEMA Y AUTENTICACIÓN
+GET    /api/health                         Servicio activo (público)
+GET    /api                                Información general (público)
+POST   /api/auth/register                  Registro (público)
+POST   /api/auth/login                     Login y entrega de token (público)
+GET    /api/auth/me                        Perfil con token
+
+HUÉSPEDES
+GET    /api/guests                         Listar; admite ?q=texto
+POST   /api/guests                         Crear huésped
+GET    /api/guests/{id}                    Consultar huésped
+PATCH  /api/guests/{id}                    Actualizar huésped
+PUT    /api/guests/{id}                    Actualizar huésped
+DELETE /api/guests/{id}                    Eliminar (admin y sin reservas asociadas)
+
+HABITACIONES
+GET    /api/rooms                          Listar; filtros ?status=Disponible&type=Doble
+POST   /api/rooms                          Crear (solo administración)
+GET    /api/rooms/{id}                     Consultar habitación
+PATCH  /api/rooms/{id}                     Actualizar (solo administración)
+PUT    /api/rooms/{id}                     Actualizar (solo administración)
+DELETE /api/rooms/{id}                     Eliminar si no hay reservas activas (admin)
+
+RESERVAS
+GET    /api/reservations                   Listar; filtros ?status=Confirmada&guestId=...&roomId=...
+POST   /api/reservations                   Crear reserva
+GET    /api/reservations/{id}              Consultar reserva
+PATCH  /api/reservations/{id}              Cambiar estado, notas o fechas
+PUT    /api/reservations/{id}              Actualización parcial admitida
+DELETE /api/reservations/{id}              Eliminar si no tiene factura asociada
+POST   /api/reservations/{id}/services     Añadir consumo a reserva
+
+SERVICIOS ADICIONALES
+GET    /api/services                       Listar; filtro ?active=true/false
+POST   /api/services                       Crear (solo administración)
+GET    /api/services/{id}                  Consultar
+PATCH  /api/services/{id}                  Actualizar (solo administración)
+PUT    /api/services/{id}                  Actualizar (solo administración)
+DELETE /api/services/{id}                  Eliminar si no tiene consumos asociados (admin)
+
+FACTURAS Y PAGOS
+GET    /api/invoices                       Listar; filtros ?paymentStatus=Pendiente&reservationId=...
+POST   /api/invoices                       Crear factura con reservationId
+GET    /api/invoices/{id}                  Consultar factura
+POST   /api/invoices/{id}/payments         Registrar pago/abono
+
+MANTENIMIENTO Y REPORTES
+GET    /api/maintenance                    Listar; filtro ?status=Abierta
+POST   /api/maintenance                    Crear solicitud
+GET    /api/maintenance/{id}               Consultar solicitud
+PATCH  /api/maintenance/{id}               Actualizar estado, prioridad o notas
+PUT    /api/maintenance/{id}               Actualizar estado, prioridad o notas
+GET    /api/reports/summary                Indicadores del hotel
+
+CÓDIGOS HTTP PRINCIPALES
+200 OK | 201 Created | 400 Bad Request | 401 Unauthorized | 403 Forbidden
+404 Not Found | 409 Conflict | 413 Payload Too Large | 500 Internal Server Error
+
+Ver docs/API_REFERENCE.md para modelos de datos, ejemplos JSON, reglas, respuestas y notas de seguridad.

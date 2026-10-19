@@ -1,0 +1,18 @@
+Pruebas automatizadas de integración — Hotel Gran Marques API REST
+
+Comando: npm test
+Resultado verificado en la sesión de preparación: 36 pruebas aprobadas, 0 fallidas.
+
+Cobertura resumida:
+- Salud del servicio y autenticación.
+- Registro de usuario y validación de contraseña.
+- Consultas y creación de huéspedes.
+- Catálogo y administración de habitaciones.
+- Reservas, fechas, conflictos de disponibilidad.
+- Servicios adicionales asociados a reserva.
+- Facturación y pagos parciales.
+- Solicitudes de mantenimiento.
+- Reporte gerencial.
+- Permisos por rol y rechazo de peticiones sin token.
+
+Para repetir las pruebas con los datos locales actuales, inicie el servidor en una terminal con `npm start`, y ejecute `npm test` en una segunda terminal.

@@ -1,0 +1,16 @@
+digraph HotelAPI {
+  graph [rankdir=TB, bgcolor="white", pad="0.25", nodesep="0.32", ranksep="0.48", fontname="Arial", label="Arquitectura de servicios — Hotel Gran Marques", labelloc=t, fontsize=18, fontcolor="#102f55"];
+  node [shape=box, style="rounded,filled", fillcolor="#f4f8fc", color="#2c6395", fontname="Arial", fontsize=10, fontcolor="#17324f", margin="0.16,0.10"];
+  edge [color="#527da3", penwidth=1.25, arrowsize=0.7];
+  client [label="Cliente web / Postman\nHTTP + JSON", fillcolor="#e6f2ff"];
+  server [label="Servidor HTTP Node.js\nRutas REST · Validación · CORS", fillcolor="#cfe5fb"];
+  auth [label="Autenticación\nRegistro · Login · JWT", fillcolor="#fff0ca", color="#bd8b1f"];
+  business [label="Servicios de negocio\nHuéspedes · Habitaciones · Reservas\nServicios · Facturas/Pagos · Mantenimiento · Reportes", fillcolor="#dcefe5", color="#39845b"];
+  store [label="Persistencia JSON\napi/data/users.json\napi/data/hotel.json", fillcolor="#f3e8ff", color="#8761ad"];
+  docs [label="Documentación y pruebas\nOpenAPI · Postman · npm test", fillcolor="#fce8e6", color="#b95d55"];
+  client -> server -> auth;
+  server -> business;
+  auth -> store;
+  business -> store;
+  server -> docs [style=dashed, dir=both, color="#999999"];
+}

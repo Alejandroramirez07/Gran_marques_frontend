@@ -1,0 +1,948 @@
+{
+  "info": {
+    "_postman_id": "4298cbde-7071-4140-81c6-bb9bf3023b9b",
+    "name": "Hotel Gran Marques — API EV03",
+    "description": "Pruebas de la API REST del proyecto Hotel Gran Marques. Ejecutar en orden con el servidor local activo. La colección prepara fechas y usuarios dinámicos para disminuir conflictos entre ejecuciones.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "00 - Salud de la API",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/health",
+        "description": "00 - Salud de la API",
+        "auth": {
+          "type": "noauth"
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const suffix = Date.now().toString() + Math.floor(Math.random()*1000).toString();",
+              "pm.collectionVariables.set('runSuffix', suffix);",
+              "pm.collectionVariables.set('testUsername', 'ev03_' + suffix);",
+              "pm.collectionVariables.set('testEmail', 'ev03_' + suffix + '@hotel.test');",
+              "pm.collectionVariables.set('testPassword', 'HotelPostman2026!');",
+              "const start = new Date(); start.setUTCDate(start.getUTCDate() + 75 + Math.floor(Math.random()*500));",
+              "const end = new Date(start); end.setUTCDate(end.getUTCDate()+2);",
+              "pm.collectionVariables.set('checkIn', start.toISOString().slice(0,10));",
+              "pm.collectionVariables.set('checkOut', end.toISOString().slice(0,10));"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200 esperado', function () { pm.response.to.have.status(200); });",
+              "const j=pm.response.json(); pm.test('Servicio saludable',()=>pm.expect(j.data.status).to.eql('ok'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "01 - Registrar usuario de prueba",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/auth/register",
+        "description": "01 - Registrar usuario de prueba",
+        "auth": {
+          "type": "noauth"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Usuario Postman EV03\",\n  \"username\": \"{{testUsername}}\",\n  \"email\": \"{{testEmail}}\",\n  \"password\": \"{{testPassword}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 201 esperado', function () { pm.response.to.have.status(201); });",
+              "const j=pm.response.json(); pm.test('Usuario registrado',()=>pm.expect(j.data.user.id).to.be.a('string'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 - Verificar rechazo de contraseña incorrecta",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/auth/login",
+        "description": "02 - Verificar rechazo de contraseña incorrecta",
+        "auth": {
+          "type": "noauth"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"incorrecta-por-prueba\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 401 esperado', function () { pm.response.to.have.status(401); });",
+              "const j=pm.response.json(); pm.test('Mensaje de autenticación controlado',()=>pm.expect(j.message).to.include('autenticación'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 - Login de administración",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/auth/login",
+        "description": "03 - Login de administración",
+        "auth": {
+          "type": "noauth"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"123456\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200 esperado', function () { pm.response.to.have.status(200); });",
+              "const j=pm.response.json(); pm.collectionVariables.set('token',j.data.token); pm.test('Token Bearer recibido',()=>pm.expect(j.data.token).to.be.a('string'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "04 - Consultar perfil autenticado",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/auth/me",
+        "description": "04 - Consultar perfil autenticado",
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "key": "token",
+            "value": "{{token}}",
+            "type": "string"
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200 esperado', function () { pm.response.to.have.status(200); });",
+              "const j=pm.response.json(); pm.test('Perfil administrativo',()=>pm.expect(j.data.user.role).to.eql('Administración'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "05 - Crear huésped",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/guests",
+        "description": "05 - Crear huésped",
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "key": "token",
+            "value": "{{token}}",
+            "type": "string"
+          }
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Huésped Postman EV03\",\n  \"document\": \"CC-{{runSuffix}}\",\n  \"email\": \"guest_{{runSuffix}}@hotel.test\",\n  \"phone\": \"3000000000\",\n  \"nationality\": \"Colombiana\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 201 esperado', function () { pm.response.to.have.status(201); });",
+              "const j=pm.response.json(); pm.collectionVariables.set('guestId',j.data.guest.id); pm.test('UUID del huésped creado',()=>pm.expect(j.data.guest.id).to.be.a('string'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "06 - Listar huéspedes",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/guests?q={{runSuffix}}",
+        "description": "06 - Listar huéspedes",
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "key": "token",
+            "value": "{{token}}",
+            "type": "string"
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200 esperado', function () { pm.response.to.have.status(200); });",
+              "const j=pm.response.json(); pm.test('Lista de huéspedes',()=>pm.expect(j.data.items).to.be.an('array'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "07 - Consultar habitaciones disponibles",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/rooms?status=Disponible",
+        "description": "07 - Consultar habitaciones disponibles",
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "key": "token",
+            "value": "{{token}}",
+            "type": "string"
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200 esperado', function () { pm.response.to.have.status(200); });",
+              "const j=pm.response.json(); const r=j.data.items.find(x=>x.status==='Disponible'); pm.test('Existe habitación disponible',()=>pm.expect(r).to.exist); if(r) pm.collectionVariables.set('roomId',r.id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "08 - Consultar servicios activos",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/services?active=true",
+        "description": "08 - Consultar servicios activos",
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "key": "token",
+            "value": "{{token}}",
+            "type": "string"
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200 esperado', function () { pm.response.to.have.status(200); });",
+              "const j=pm.response.json(); const s=j.data.items.find(x=>x.active); pm.test('Existe servicio activo',()=>pm.expect(s).to.exist); if(s) pm.collectionVariables.set('serviceId',s.id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "09 - Crear reserva",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/reservations",
+        "description": "09 - Crear reserva",
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "key": "token",
+            "value": "{{token}}",
+            "type": "string"
+          }
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"guestId\": \"{{guestId}}\",\n  \"roomId\": \"{{roomId}}\",\n  \"checkIn\": \"{{checkIn}}\",\n  \"checkOut\": \"{{checkOut}}\",\n  \"guestsCount\": 1,\n  \"notes\": \"Reserva para probar la API EV03\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 201 esperado', function () { pm.response.to.have.status(201); });",
+              "const j=pm.response.json(); pm.collectionVariables.set('reservationId',j.data.reservation.id); pm.test('Reserva de dos noches',()=>pm.expect(j.data.reservation.nights).to.eql(2));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "10 - Detectar cruce de fechas",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/reservations",
+        "description": "10 - Detectar cruce de fechas",
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "key": "token",
+            "value": "{{token}}",
+            "type": "string"
+          }
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"guestId\": \"{{guestId}}\",\n  \"roomId\": \"{{roomId}}\",\n  \"checkIn\": \"{{checkIn}}\",\n  \"checkOut\": \"{{checkOut}}\",\n  \"guestsCount\": 1\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 409 esperado', function () { pm.response.to.have.status(409); });",
+              "const j=pm.response.json(); pm.test('Conflicto de disponibilidad comunicado',()=>pm.expect(j.message).to.include('reserva'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "11 - Agregar servicio a la reserva",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/reservations/{{reservationId}}/services",
+        "description": "11 - Agregar servicio a la reserva",
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "key": "token",
+            "value": "{{token}}",
+            "type": "string"
+          }
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"serviceId\": \"{{serviceId}}\",\n  \"quantity\": 1\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 201 esperado', function () { pm.response.to.have.status(201); });",
+              "const j=pm.response.json(); pm.test('Consumo relacionado con reserva',()=>pm.expect(j.data.reservation.services.length).to.be.above(0));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "12 - Generar factura",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/invoices",
+        "description": "12 - Generar factura",
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "key": "token",
+            "value": "{{token}}",
+            "type": "string"
+          }
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"reservationId\": \"{{reservationId}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 201 esperado', function () { pm.response.to.have.status(201); });",
+              "const j=pm.response.json(); pm.collectionVariables.set('invoiceId',j.data.invoice.id); pm.test('Factura con total positivo',()=>pm.expect(j.data.invoice.total).to.be.above(0));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "13 - Evitar factura duplicada",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/invoices",
+        "description": "13 - Evitar factura duplicada",
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "key": "token",
+            "value": "{{token}}",
+            "type": "string"
+          }
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"reservationId\": \"{{reservationId}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 409 esperado', function () { pm.response.to.have.status(409); });",
+              "const j=pm.response.json(); pm.test('Duplicado informado',()=>pm.expect(j.message).to.include('factura'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "14 - Registrar abono",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/invoices/{{invoiceId}}/payments",
+        "description": "14 - Registrar abono",
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "key": "token",
+            "value": "{{token}}",
+            "type": "string"
+          }
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"amount\": 10000,\n  \"method\": \"Transferencia\",\n  \"reference\": \"TRX-{{runSuffix}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 201 esperado', function () { pm.response.to.have.status(201); });",
+              "const j=pm.response.json(); pm.test('Saldo no negativo',()=>pm.expect(j.data.balance).to.be.at.least(0));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "15 - Consultar factura",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/invoices/{{invoiceId}}",
+        "description": "15 - Consultar factura",
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "key": "token",
+            "value": "{{token}}",
+            "type": "string"
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200 esperado', function () { pm.response.to.have.status(200); });",
+              "const j=pm.response.json(); pm.test('Factura tiene pagos',()=>pm.expect(j.data.invoice.payments.length).to.be.above(0));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "16 - Crear solicitud de mantenimiento",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/maintenance",
+        "description": "16 - Crear solicitud de mantenimiento",
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "key": "token",
+            "value": "{{token}}",
+            "type": "string"
+          }
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"roomId\": \"{{roomId}}\",\n  \"area\": \"Habitación\",\n  \"description\": \"Revisión generada en colección Postman\",\n  \"priority\": \"Media\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 201 esperado', function () { pm.response.to.have.status(201); });",
+              "const j=pm.response.json(); pm.collectionVariables.set('maintenanceId',j.data.item.id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "17 - Actualizar mantenimiento",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/maintenance/{{maintenanceId}}",
+        "description": "17 - Actualizar mantenimiento",
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "key": "token",
+            "value": "{{token}}",
+            "type": "string"
+          }
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"En proceso\",\n  \"notes\": \"Solicitud asignada durante la prueba\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200 esperado', function () { pm.response.to.have.status(200); });",
+              "const j=pm.response.json(); pm.test('Estado actualizado',()=>pm.expect(j.data.item.status).to.eql('En proceso'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "18 - Consultar indicadores de gerencia",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/reports/summary",
+        "description": "18 - Consultar indicadores de gerencia",
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "key": "token",
+            "value": "{{token}}",
+            "type": "string"
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200 esperado', function () { pm.response.to.have.status(200); });",
+              "const j=pm.response.json(); pm.test('Reporte incluye reservas y habitaciones',()=>{pm.expect(j.data.rooms).to.be.a('number');pm.expect(j.data.reservationsTotal).to.be.a('number');});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "19 - Crear habitación como administrador",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/rooms",
+        "description": "19 - Crear habitación como administrador",
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "key": "token",
+            "value": "{{token}}",
+            "type": "string"
+          }
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"number\": \"T{{runSuffix}}\",\n  \"type\": \"Sencilla\",\n  \"capacity\": 1,\n  \"rate\": 90000,\n  \"status\": \"Disponible\",\n  \"description\": \"Habitación de prueba Postman\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 201 esperado', function () { pm.response.to.have.status(201); });",
+              "const j=pm.response.json(); pm.collectionVariables.set('newRoomId',j.data.room.id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "20 - Login de recepción",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/auth/login",
+        "description": "20 - Login de recepción",
+        "auth": {
+          "type": "noauth"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"recepcion\",\n  \"password\": \"123456\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200 esperado', function () { pm.response.to.have.status(200); });",
+              "const j=pm.response.json(); pm.collectionVariables.set('tokenReception',j.data.token);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "21 - Rechazar cambios de catálogo a recepción",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/rooms",
+        "description": "21 - Rechazar cambios de catálogo a recepción",
+        "auth": {
+          "type": "bearer",
+          "bearer": {
+            "key": "token",
+            "value": "{{tokenReception}}",
+            "type": "string"
+          }
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"number\": \"DENY-{{runSuffix}}\",\n  \"type\": \"Sencilla\",\n  \"capacity\": 1,\n  \"rate\": 50000\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 403 esperado', function () { pm.response.to.have.status(403); });",
+              "const j=pm.response.json(); pm.test('Permiso denegado por rol',()=>pm.expect(j.message).to.include('administración'));"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "tokenReception",
+      "value": ""
+    },
+    {
+      "key": "guestId",
+      "value": ""
+    },
+    {
+      "key": "roomId",
+      "value": ""
+    },
+    {
+      "key": "serviceId",
+      "value": ""
+    },
+    {
+      "key": "reservationId",
+      "value": ""
+    },
+    {
+      "key": "invoiceId",
+      "value": ""
+    },
+    {
+      "key": "maintenanceId",
+      "value": ""
+    },
+    {
+      "key": "newRoomId",
+      "value": ""
+    },
+    {
+      "key": "runSuffix",
+      "value": ""
+    },
+    {
+      "key": "checkIn",
+      "value": ""
+    },
+    {
+      "key": "checkOut",
+      "value": ""
+    },
+    {
+      "key": "testUsername",
+      "value": ""
+    },
+    {
+      "key": "testEmail",
+      "value": ""
+    },
+    {
+      "key": "testPassword",
+      "value": "HotelPostman2026!"
+    }
+  ]
+}

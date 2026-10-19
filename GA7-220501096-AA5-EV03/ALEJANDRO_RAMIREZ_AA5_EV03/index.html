@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sistema de Gestión Hotelera - Hotel Gran Marques">
+  <title>Hotel Gran Marques | Sistema de Gestión Hotelera</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div id="toast" class="toast" aria-live="polite"></div>
+
+  <section id="loginView" class="login-shell">
+    <div class="login-hero">
+      <div class="brand-lockup light">
+        <div class="brand-mark">GM</div>
+        <div>
+          <strong>HOTEL GRAN MARQUES</strong>
+          <span>Hospitalidad que inspira</span>
+        </div>
+      </div>
+      <div class="hero-copy">
+        <span class="eyebrow">SISTEMA DE GESTIÓN HOTELERA</span>
+        <h1>Administra la operación del hotel desde un solo lugar.</h1>
+        <p>Reservas, habitaciones, servicios, facturación, mantenimiento y reportes en una experiencia clara para recepción y administración.</p>
+      </div>
+      <div class="hero-footer">Tecnología en Análisis y Desarrollo de Software</div>
+    </div>
+
+    <div class="login-panel">
+      <div class="login-card">
+        <div class="brand-lockup dark">
+          <div class="brand-mark small">GM</div>
+          <div>
+            <strong>Hotel Gran Marques</strong>
+            <span>Acceso al sistema</span>
+          </div>
+        </div>
+        <div class="section-heading">
+          <span class="eyebrow">Bienvenido</span>
+          <h2>Iniciar sesión</h2>
+          <p>Ingresa tus credenciales para continuar.</p>
+        </div>
+        <form id="loginForm" class="stack-form">
+          <label>
+            Usuario
+            <input id="loginUser" name="user" type="text" autocomplete="username" placeholder="Ej. recepcion" required>
+          </label>
+          <label>
+            Contraseña
+            <div class="password-field">
+              <input id="loginPassword" name="password" type="password" autocomplete="current-password" placeholder="••••••••" required>
+              <button type="button" class="icon-button" id="togglePassword" aria-label="Mostrar contraseña">◉</button>
+            </div>
+          </label>
+          <div class="login-options">
+            <label class="check-row"><input type="checkbox" id="rememberMe"> Recordarme</label>
+            <button type="button" class="link-button" id="forgotPassword">¿Olvidaste tu contraseña?</button>
+          </div>
+          <button class="btn primary full" type="submit">Iniciar sesión</button>
+        </form>
+        <div class="demo-box">
+          <strong>Accesos de demostración</strong>
+          <span>Recepción: <b>recepcion</b> / <b>123456</b></span>
+          <span>Administración: <b>admin</b> / <b>123456</b></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="appView" class="app-shell hidden">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-top">
+        <div class="brand-lockup light compact">
+          <div class="brand-mark small">GM</div>
+          <div>
+            <strong>Gran Marques</strong>
+            <span>Gestión Hotelera</span>
+          </div>
+        </div>
+        <button id="closeSidebar" class="icon-button sidebar-close" aria-label="Cerrar menú">×</button>
+      </div>
+
+      <nav class="main-nav" aria-label="Navegación principal">
+        <button class="nav-item active" data-route="dashboard"><span>⌂</span> Inicio</button>
+        <button class="nav-item" data-route="reservas"><span>▣</span> Reservas</button>
+        <button class="nav-item" data-route="habitaciones"><span>▤</span> Habitaciones</button>
+        <button class="nav-item" data-route="servicios"><span>✦</span> Servicios</button>
+        <button class="nav-item" data-route="facturacion"><span>$</span> Facturación</button>
+        <button class="nav-item" data-route="reportes"><span>◒</span> Reportes</button>
+        <button class="nav-item" data-route="mantenimiento"><span>⚙</span> Mantenimiento</button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <button class="nav-item" data-route="configuracion"><span>◌</span> Configuración</button>
+        <button class="nav-item logout" id="logoutBtn"><span>↪</span> Cerrar sesión</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <button id="openSidebar" class="icon-button menu-trigger" aria-label="Abrir menú">☰</button>
+        <div class="topbar-title">
+          <span class="eyebrow" id="breadcrumb">Inicio</span>
+          <h1 id="pageTitle">Panel de control</h1>
+        </div>
+        <div class="topbar-actions">
+          <button class="icon-button notification-btn" id="notificationBtn" aria-label="Notificaciones">🔔<span class="notification-dot"></span></button>
+          <div class="user-menu">
+            <div class="avatar" id="avatar">RC</div>
+            <div class="user-text"><strong id="userName">Recepcionista</strong><span id="userRole">Recepción</span></div>
+          </div>
+        </div>
+      </header>
+
+      <div id="pageContent" class="page-content"></div>
+    </main>
+  </section>
+
+  <div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-backdrop" data-close-modal></div>
+    <div class="modal-card">
+      <div class="modal-header">
+        <div><span class="eyebrow" id="modalEyebrow">Hotel Gran Marques</span><h2 id="modalTitle">Modal</h2></div>
+        <button class="icon-button" data-close-modal aria-label="Cerrar">×</button>
+      </div>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <script src="js/app.js" defer></script>
+</body>
+</html>

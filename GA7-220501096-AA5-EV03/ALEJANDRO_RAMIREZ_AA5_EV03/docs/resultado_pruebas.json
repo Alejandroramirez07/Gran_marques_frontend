@@ -1,0 +1,58 @@
+{
+  "generatedAt": "2026-10-19T02:38:11.326Z",
+  "baseUrl": "http://localhost:3000",
+  "total": 7,
+  "passed": 7,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "Salud de API",
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "ok": true,
+      "message": "ok"
+    },
+    {
+      "name": "Registro de nuevo usuario",
+      "expectedStatus": 201,
+      "actualStatus": 201,
+      "ok": true,
+      "message": "Registro creado satisfactoriamente."
+    },
+    {
+      "name": "Login con credenciales correctas",
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "ok": true,
+      "message": "Autenticación satisfactoria."
+    },
+    {
+      "name": "Login con contraseña incorrecta",
+      "expectedStatus": 401,
+      "actualStatus": 401,
+      "ok": true,
+      "message": "Error en la autenticación."
+    },
+    {
+      "name": "Rechazo de usuario duplicado",
+      "expectedStatus": 409,
+      "actualStatus": 409,
+      "ok": true,
+      "message": "El usuario o correo ya está registrado."
+    },
+    {
+      "name": "Ruta privada con token válido",
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "ok": true,
+      "message": ""
+    },
+    {
+      "name": "Ruta privada sin token",
+      "expectedStatus": 401,
+      "actualStatus": 401,
+      "ok": true,
+      "message": "Se requiere un token Bearer."
+    }
+  ]
+}
