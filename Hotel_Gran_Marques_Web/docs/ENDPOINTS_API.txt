@@ -1,0 +1,31 @@
+EVIDENCIA GA7-220501096-AA5-EV02
+Sistema: Hotel Gran Marques — API de autenticación
+Base URL local: http://localhost:3000
+Content-Type para solicitudes JSON: application/json
+
+1) GET /api/health
+   Propósito: verificar que la API está disponible.
+   Respuesta esperada: 200 OK.
+   Ejemplo de respuesta: {"success":true,"service":"Hotel Gran Marques Auth API","status":"ok"}
+
+2) POST /api/auth/register
+   Propósito: registrar un usuario nuevo.
+   Body JSON requerido:
+   {"name":"Usuario de prueba","username":"usuario01","email":"usuario01@hotel.test","password":"ClaveSegura2026!"}
+   Respuestas: 201 creado; 400 datos inválidos/incompletos; 409 usuario o correo duplicado.
+
+3) POST /api/auth/login
+   Propósito: autenticar por usuario/correo y contraseña.
+   Body JSON:
+   {"username":"usuario01","password":"ClaveSegura2026!"}
+   Respuestas: 200 autenticación satisfactoria y token Bearer; 400 faltan campos; 401 credenciales incorrectas.
+
+4) GET /api/auth/me
+   Propósito: demostrar que el token es válido y consultar el perfil autenticado.
+   Header requerido: Authorization: Bearer <token>
+   Respuestas: 200 token correcto; 401 token ausente, inválido o expirado; 404 usuario no encontrado.
+
+Cuentas locales predefinidas para demostración (solo desarrollo):
+- recepcion / 123456
+- admin / 123456
+No reutilizar estas contraseñas en un despliegue real.

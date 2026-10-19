@@ -1,0 +1,16 @@
+EVIDENCIA GA7-220501096-AA5-EV02 — ENLACE DEL REPOSITORIO
+
+PENDIENTE: pegar aquí el enlace real del repositorio remoto (GitHub/GitLab/Azure DevOps) después de publicarlo.
+No se ha inventado una URL porque el repositorio remoto debe crearse desde la cuenta del aprendiz.
+
+Pasos sugeridos desde la carpeta Hotel_Gran_Marques_Web:
+1. git status
+2. git add .
+3. git commit -m "GA7 AA5 EV02: API de registro y autenticacion"
+4. Crear un repositorio vacío en la plataforma elegida.
+5. git remote add origin https://github.com/USUARIO/REPOSITORIO.git
+6. git branch -M main
+7. git push -u origin main
+8. Copiar la URL real del repositorio y reemplazar esta nota por el enlace.
+
+Seguridad: no subir el archivo .env, node_modules ni datos de usuarios reales. El .gitignore excluye los archivos locales sensibles.

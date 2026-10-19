@@ -1,0 +1,57 @@
+{
+  "info": {
+    "_postman_id": "8d9c1d8b-24e3-49ec-90e8-0f6c58cb4b2d",
+    "name": "Hotel Gran Marques - API de autenticación - GA7-220501096-AA5-EV02",
+    "description": "Pruebas de salud, registro, login correcto e incorrecto, duplicados y ruta protegida. Ejecutar en orden de arriba hacia abajo.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {"key":"baseUrl","value":"http://localhost:3000"},
+    {"key":"testUsername","value":""},
+    {"key":"testEmail","value":""},
+    {"key":"testPassword","value":"PruebaSegura2026!"},
+    {"key":"authToken","value":""}
+  ],
+  "item": [
+    {
+      "name": "01 - Salud de la API",
+      "request": {"method":"GET","header":[],"url":{"raw":"{{baseUrl}}/api/health","host":["{{baseUrl}}"],"path":["api","health"]},"description":"Comprueba que el backend responde."},
+      "event":[{"listen":"test","script":{"type":"text/javascript","exec":["pm.test('HTTP 200 y servicio activo', function () { pm.response.to.have.status(200); });","const data = pm.response.json();","pm.test('La respuesta incluye status ok', function () { pm.expect(data.success).to.eql(true); pm.expect(data.status).to.eql('ok'); });"]}}]
+    },
+    {
+      "name": "02 - Registrar usuario nuevo",
+      "event":[{"listen":"prerequest","script":{"type":"text/javascript","exec":["const suffix = Date.now().toString();","pm.collectionVariables.set('testUsername', 'leidy_ev02_' + suffix);","pm.collectionVariables.set('testEmail', 'leidy_ev02_' + suffix + '@hotel.test');","pm.collectionVariables.set('testPassword', 'PruebaSegura2026!');"]}},{"listen":"test","script":{"type":"text/javascript","exec":["pm.test('Registro creado con HTTP 201', function () { pm.response.to.have.status(201); });","const data = pm.response.json();","pm.test('Respuesta de registro exitosa y sin contraseña', function () { pm.expect(data.success).to.eql(true); pm.expect(data.user.username).to.eql(pm.collectionVariables.get('testUsername')); pm.expect(data.user).to.not.have.property('passwordHash'); });"]}}],
+      "request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\n  \"name\": \"Aprendiz prueba EV02\",\n  \"username\": \"{{testUsername}}\",\n  \"email\": \"{{testEmail}}\",\n  \"password\": \"{{testPassword}}\"\n}","options":{"raw":{"language":"json"}}},"url":{"raw":"{{baseUrl}}/api/auth/register","host":["{{baseUrl}}"],"path":["api","auth","register"]},"description":"Crea un usuario con nombre, usuario, correo y contraseña de prueba."}
+    },
+    {
+      "name": "03 - Login correcto",
+      "request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\n  \"username\": \"{{testUsername}}\",\n  \"password\": \"{{testPassword}}\"\n}","options":{"raw":{"language":"json"}}},"url":{"raw":"{{baseUrl}}/api/auth/login","host":["{{baseUrl}}"],"path":["api","auth","login"]}},
+      "event":[{"listen":"test","script":{"type":"text/javascript","exec":["pm.test('Login correcto devuelve HTTP 200', function () { pm.response.to.have.status(200); });","const data = pm.response.json();","pm.test('Mensaje y JWT presentes', function () { pm.expect(data.message).to.eql('Autenticación satisfactoria.'); pm.expect(data.token).to.be.a('string').and.not.empty; });","pm.collectionVariables.set('authToken', data.token);"]}}]
+    },
+    {
+      "name": "04 - Login incorrecto",
+      "request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\n  \"username\": \"{{testUsername}}\",\n  \"password\": \"ClaveIncorrecta999\"\n}","options":{"raw":{"language":"json"}}},"url":{"raw":"{{baseUrl}}/api/auth/login","host":["{{baseUrl}}"],"path":["api","auth","login"]}},
+      "event":[{"listen":"test","script":{"type":"text/javascript","exec":["pm.test('Login incorrecto devuelve HTTP 401', function () { pm.response.to.have.status(401); });","const data = pm.response.json();","pm.test('La respuesta informa error de autenticación', function () { pm.expect(data.success).to.eql(false); pm.expect(data.message).to.eql('Error en la autenticación.'); });"]}}]
+    },
+    {
+      "name": "05 - Rechazar usuario duplicado",
+      "request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\n  \"name\": \"Usuario duplicado\",\n  \"username\": \"{{testUsername}}\",\n  \"email\": \"duplicado_{{testEmail}}\",\n  \"password\": \"{{testPassword}}\"\n}","options":{"raw":{"language":"json"}}},"url":{"raw":"{{baseUrl}}/api/auth/register","host":["{{baseUrl}}"],"path":["api","auth","register"]}},
+      "event":[{"listen":"test","script":{"type":"text/javascript","exec":["pm.test('Usuario duplicado se rechaza con HTTP 409', function () { pm.response.to.have.status(409); });","pm.test('Se informa que existe el usuario o correo', function () { pm.expect(pm.response.json().success).to.eql(false); });"]}}]
+    },
+    {
+      "name": "06 - Consultar perfil con token",
+      "request":{"method":"GET","header":[{"key":"Authorization","value":"Bearer {{authToken}}"}],"url":{"raw":"{{baseUrl}}/api/auth/me","host":["{{baseUrl}}"],"path":["api","auth","me"]}},
+      "event":[{"listen":"test","script":{"type":"text/javascript","exec":["pm.test('Token válido permite consultar el perfil', function () { pm.response.to.have.status(200); });","pm.test('El perfil coincide con el usuario registrado', function () { pm.expect(pm.response.json().user.username).to.eql(pm.collectionVariables.get('testUsername')); });"]}}]
+    },
+    {
+      "name": "07 - Ruta protegida sin token",
+      "request":{"method":"GET","header":[],"url":{"raw":"{{baseUrl}}/api/auth/me","host":["{{baseUrl}}"],"path":["api","auth","me"]}},
+      "event":[{"listen":"test","script":{"type":"text/javascript","exec":["pm.test('Sin token se devuelve HTTP 401', function () { pm.response.to.have.status(401); });","pm.test('Se requiere un Bearer token', function () { pm.expect(pm.response.json().success).to.eql(false); });"]}}]
+    },
+    {
+      "name": "08 - Registro incompleto",
+      "request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\n  \"username\": \"sin_datos\",\n  \"password\": \"PruebaSegura2026!\"\n}","options":{"raw":{"language":"json"}}},"url":{"raw":"{{baseUrl}}/api/auth/register","host":["{{baseUrl}}"],"path":["api","auth","register"]}},
+      "event":[{"listen":"test","script":{"type":"text/javascript","exec":["pm.test('Registro incompleto se rechaza con HTTP 400', function () { pm.response.to.have.status(400); });"]}}]
+    }
+  ]
+}

@@ -59,6 +59,7 @@ function hydrate(){
   ['rooms','reservations','invoices','maintenance'].forEach(k=>{const raw=localStorage.getItem('gm_'+k); if(raw){try{state[k]=JSON.parse(raw)}catch{}}});
 }
 function setUser(user){
+  // Conserva el perfil para actualizar la interfaz y el token que devuelve la API.
   state.user=user; localStorage.setItem('gm_user',JSON.stringify(user)); updateUserUI(); $('#loginView').classList.add('hidden'); $('#appView').classList.remove('hidden'); navigate('dashboard');
 }
 function updateUserUI(){
@@ -66,7 +67,7 @@ function updateUserUI(){
   $('#userName').textContent=state.user.name; $('#userRole').textContent=state.user.role; $('#avatar').textContent=state.user.initials;
 }
 function logout(){
-  state.user=null; localStorage.removeItem('gm_user'); $('#appView').classList.add('hidden'); $('#loginView').classList.remove('hidden'); $('#loginForm').reset(); showToast('Sesión cerrada correctamente.');
+  state.user=null; localStorage.removeItem('gm_user'); localStorage.removeItem('gm_token'); $('#appView').classList.add('hidden'); $('#loginView').classList.remove('hidden'); $('#loginForm').reset(); showToast('Sesión cerrada correctamente.');
 }
 
 function layoutPage(content){ $('#pageContent').innerHTML=content; bindPageActions(); }
@@ -223,7 +224,9 @@ function initModalDelegation(){
 
 function init(){
   hydrate();
-  const saved=localStorage.getItem('gm_user'); if(saved){try{state.user=JSON.parse(saved)}catch{}}
+  const saved=localStorage.getItem('gm_user');
+  if(saved && localStorage.getItem('gm_token')){try{state.user=JSON.parse(saved)}catch{state.user=null}}
+  else { state.user=null; localStorage.removeItem('gm_user'); }
   $('#togglePassword').addEventListener('click',()=>{const i=$('#loginPassword');i.type=i.type==='password'?'text':'password'});
   $('#forgotPassword').addEventListener('click',()=>showToast('Contacta al administrador del hotel para restablecer tu contraseña.'));
   $('#notificationBtn').addEventListener('click',()=>showToast('Tienes 3 alertas de mantenimiento pendientes.'));
@@ -231,15 +234,35 @@ function init(){
   $('#openSidebar').addEventListener('click',()=>$('#sidebar').classList.add('open'));
   $('#closeSidebar').addEventListener('click',()=>$('#sidebar').classList.remove('open'));
   $$('.nav-item[data-route]').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.route)));
-  $('#loginForm').addEventListener('submit',e=>{
-    e.preventDefault(); const u=$('#loginUser').value.trim(), p=$('#loginPassword').value;
-    const credentials={recepcion:{password:'123456',name:'Recepcionista',role:'Recepción',initials:'RC'},admin:{password:'123456',name:'Administrador',role:'Administración',initials:'AD'}}; const c=credentials[u];
-    if(!c||c.password!==p){showToast('Usuario o contraseña incorrectos.');return}
-    setUser({...c,username:u});
+  $('#loginForm').addEventListener('submit',async e=>{
+    e.preventDefault();
+    const u=$('#loginUser').value.trim(), p=$('#loginPassword').value;
+    const submitButton=e.submitter || $('#loginForm').querySelector('button[type=submit]');
+    if(submitButton) submitButton.disabled=true;
+    try{
+      // El acceso se valida en la API REST; no se compara la contraseña en el navegador.
+      const response=await fetch('/api/auth/login',{
+        method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({username:u,password:p})
+      });
+      const result=await response.json();
+      if(!response.ok || !result.success){showToast(result.message || 'Error en la autenticación.');return}
+      localStorage.setItem('gm_token',result.token);
+      const profile=result.user;
+      const mapped={...profile, initials:profile.role==='Administración'?'AD':'RC'};
+      setUser(mapped);
+      showToast(result.message || 'Autenticación satisfactoria.');
+    }catch(error){
+      showToast('No fue posible conectar con la API. Verifica que el servidor esté ejecutándose.');
+    }finally{if(submitButton)submitButton.disabled=false;}
   });
   document.addEventListener('click',e=>{const b=e.target.closest('#pageContent [data-route-go]'); if(b) navigate(b.dataset.routeGo)});
   initModalDelegation();
-  if(state.user){updateUserUI();$('#loginView').classList.add('hidden');$('#appView').classList.remove('hidden');navigate('dashboard')}
+  if(state.user && localStorage.getItem('gm_token')){
+    // Revalida la sesión contra la API antes de mostrar los módulos protegidos.
+    fetch('/api/auth/me',{headers:{Authorization:`Bearer ${localStorage.getItem('gm_token')}`}})
+      .then(async response=>{if(!response.ok) throw new Error('Sesión inválida'); const data=await response.json(); state.user={...data.user,initials:data.user.role==='Administración'?'AD':'RC'}; localStorage.setItem('gm_user',JSON.stringify(state.user)); updateUserUI(); $('#loginView').classList.add('hidden'); $('#appView').classList.remove('hidden'); navigate('dashboard');})
+      .catch(()=>{state.user=null;localStorage.removeItem('gm_user');localStorage.removeItem('gm_token');$('#appView').classList.add('hidden');$('#loginView').classList.remove('hidden');});
+  }
 }
 
 document.addEventListener('DOMContentLoaded',init);
