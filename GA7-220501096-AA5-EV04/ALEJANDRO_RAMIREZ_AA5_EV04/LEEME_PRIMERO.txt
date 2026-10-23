@@ -1,0 +1,8 @@
+LEEME PRIMERO — GA7-220501096-AA5-EV04
+1. npm start para iniciar el servidor.
+2. npm test para ejecutar la suite automatizada. Resultado en docs/RESULTADO_PRUEBAS_EV04.txt.
+3. Importa la colección y ambiente de postman/ en Postman. Instrucciones detalladas en docs/POSTMAN_Como_Probar_EV04.md.
+4. Graba el video real siguiendo video/GUIA_GRABACION_VIDEO_POSTMAN.txt.
+5. Guarda las capturas reales de Postman en evidencias_postman/.
+6. Actualiza ENLACE_REPOSITORIO.txt con la URL real tras hacer push.
+7. Vuelve a comprimir la carpeta después de añadir el video, capturas y URL del repositorio.

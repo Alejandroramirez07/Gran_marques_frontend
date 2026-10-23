@@ -1,0 +1,50 @@
+Pruebas de integración API — Hotel Gran Marques
+Evidencia: GA7-220501096-AA5-EV04
+Base URL: http://127.0.0.1:3012 (puerto de prueba)
+Fecha/hora: 2026-10-19T04:21:34.464Z
+Total de aserciones: 36
+Aprobadas: 36
+Fallidas: 0
+
+
+> hotel-gran-marques-api@2.1.0 test
+> node scripts/api-test.js
+
+PASS GET /api/health — esperado 200, recibido 200
+PASS Respuesta de salud incluye success=true
+PASS POST /api/auth/login — esperado 200, recibido 200
+PASS El login de administración devuelve token
+PASS GET /api/auth/me — esperado 200, recibido 200
+PASS El perfil tiene rol administrativo
+PASS POST /api/auth/register — esperado 201, recibido 201
+PASS POST /api/auth/login — esperado 200, recibido 200
+PASS El usuario registrado obtiene token
+PASS POST /api/auth/login — esperado 401, recibido 401
+PASS POST /api/guests — esperado 201, recibido 201
+PASS El huésped creado tiene identificador
+PASS GET /api/guests?q=1792383694126_2485 — esperado 200, recibido 200
+PASS La búsqueda devuelve el huésped nuevo
+PASS GET /api/rooms — esperado 200, recibido 200
+PASS El catálogo contiene habitación disponible
+PASS POST /api/reservations — esperado 201, recibido 201
+PASS La reserva calcula las noches
+PASS POST /api/reservations — esperado 409, recibido 409
+PASS GET /api/reservations/741419cb-f282-44ef-b757-dd1c06fc57d0 — esperado 200, recibido 200
+PASS GET /api/services?active=true — esperado 200, recibido 200
+PASS Existe servicio adicional activo
+PASS POST /api/reservations/741419cb-f282-44ef-b757-dd1c06fc57d0/services — esperado 201, recibido 201
+PASS El consumo queda vinculado a la reserva
+PASS POST /api/invoices — esperado 201, recibido 201
+PASS La factura tiene total positivo
+PASS POST /api/invoices — esperado 409, recibido 409
+PASS POST /api/invoices/9def02f6-0fea-4bca-88de-6d4e0bf129a7/payments — esperado 201, recibido 201
+PASS El abono deja estado parcial cuando corresponde
+PASS POST /api/maintenance — esperado 201, recibido 201
+PASS PATCH /api/maintenance/607d2c8d-dcdd-4870-aa7d-c155b0ae2f5e — esperado 200, recibido 200
+PASS GET /api/reports/summary — esperado 200, recibido 200
+PASS El reporte contiene indicadores
+PASS POST /api/rooms — esperado 403, recibido 403
+PASS POST /api/rooms — esperado 201, recibido 201
+PASS GET /api/guests — esperado 401, recibido 401
+
+Resultado final: 36/36 aprobadas; 0 fallidas.

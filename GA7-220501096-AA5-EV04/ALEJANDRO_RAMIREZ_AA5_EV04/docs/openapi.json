@@ -1,0 +1,1633 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Hotel Gran Marques API",
+    "version": "2.1.0",
+    "description": "Servicios REST para operación hotelera: autenticación, huéspedes, habitaciones, reservas, servicios, facturación, pagos, mantenimiento y reportes. Evidencia GA7-220501096-AA5-EV04."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Servidor local de desarrollo"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Sistema"
+    },
+    {
+      "name": "Autenticación"
+    },
+    {
+      "name": "Huéspedes"
+    },
+    {
+      "name": "Habitaciones"
+    },
+    {
+      "name": "Reservas"
+    },
+    {
+      "name": "Servicios"
+    },
+    {
+      "name": "Facturación"
+    },
+    {
+      "name": "Pagos"
+    },
+    {
+      "name": "Mantenimiento"
+    },
+    {
+      "name": "Reportes"
+    }
+  ],
+  "paths": {
+    "/api/health": {
+      "get": {
+        "summary": "Estado del servicio",
+        "description": "Estado del servicio",
+        "tags": [
+          "Sistema"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": []
+      }
+    },
+    "/api": {
+      "get": {
+        "summary": "Información de la API",
+        "description": "Información de la API",
+        "tags": [
+          "Sistema"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/auth/register": {
+      "post": {
+        "summary": "Registrar usuario",
+        "description": "Registrar usuario",
+        "tags": [
+          "Autenticación"
+        ],
+        "responses": {
+          "201": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "name": "Andrea Demo",
+                "username": "andrea_demo",
+                "email": "andrea@example.test",
+                "password": "ClaveSegura2026!"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "summary": "Autenticar usuario y recibir token",
+        "description": "Autenticar usuario y recibir token",
+        "tags": [
+          "Autenticación"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "username": "admin",
+                "password": "123456"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/me": {
+      "get": {
+        "summary": "Consultar perfil autenticado",
+        "description": "Consultar perfil autenticado",
+        "tags": [
+          "Autenticación"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/guests": {
+      "get": {
+        "summary": "Listar o buscar huéspedes",
+        "description": "Listar o buscar huéspedes",
+        "tags": [
+          "Huéspedes"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Texto que filtra por nombre, documento, correo o teléfono"
+          }
+        ]
+      },
+      "post": {
+        "summary": "Crear huésped",
+        "description": "Crear huésped",
+        "tags": [
+          "Huéspedes"
+        ],
+        "responses": {
+          "201": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "name": "Andrea Torres",
+                "document": "CC-123456789",
+                "email": "andrea@example.test",
+                "phone": "3001234567",
+                "nationality": "Colombiana"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/guests/{id}": {
+      "get": {
+        "summary": "Consultar huésped",
+        "description": "Consultar huésped",
+        "tags": [
+          "Huéspedes"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "patch": {
+        "summary": "Actualizar huésped",
+        "description": "Actualizar huésped",
+        "tags": [
+          "Huéspedes"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "phone": "3005556677"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Actualizar huésped",
+        "description": "Actualizar huésped",
+        "tags": [
+          "Huéspedes"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "phone": "3005556677"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Eliminar huésped (administración)",
+        "description": "Eliminar huésped (administración)",
+        "tags": [
+          "Huéspedes"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/rooms": {
+      "get": {
+        "summary": "Listar y filtrar habitaciones",
+        "description": "Listar y filtrar habitaciones",
+        "tags": [
+          "Habitaciones"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Estado: Disponible, Ocupada, Mantenimiento"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Tipo de habitación"
+          }
+        ]
+      },
+      "post": {
+        "summary": "Crear habitación (administración)",
+        "description": "Crear habitación (administración)",
+        "tags": [
+          "Habitaciones"
+        ],
+        "responses": {
+          "201": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "number": "305",
+                "type": "Doble",
+                "capacity": 2,
+                "rate": 185000,
+                "status": "Disponible",
+                "description": "Habitación doble"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/rooms/{id}": {
+      "get": {
+        "summary": "Consultar habitación",
+        "description": "Consultar habitación",
+        "tags": [
+          "Habitaciones"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "patch": {
+        "summary": "Actualizar habitación (administración)",
+        "description": "Actualizar habitación (administración)",
+        "tags": [
+          "Habitaciones"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "rate": 190000
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Actualizar habitación (administración)",
+        "description": "Actualizar habitación (administración)",
+        "tags": [
+          "Habitaciones"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "rate": 190000
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Eliminar habitación (administración)",
+        "description": "Eliminar habitación (administración)",
+        "tags": [
+          "Habitaciones"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/reservations": {
+      "get": {
+        "summary": "Listar reservas",
+        "description": "Listar reservas",
+        "tags": [
+          "Reservas"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Estado de reserva"
+          },
+          {
+            "name": "guestId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "UUID del huésped"
+          },
+          {
+            "name": "roomId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "UUID de la habitación"
+          }
+        ]
+      },
+      "post": {
+        "summary": "Crear reserva",
+        "description": "Crear reserva",
+        "tags": [
+          "Reservas"
+        ],
+        "responses": {
+          "201": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "guestId": "UUID_HUESPED",
+                "roomId": "UUID_HABITACION",
+                "checkIn": "2026-12-10",
+                "checkOut": "2026-12-12",
+                "guestsCount": 2,
+                "notes": "Llegada en la tarde"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reservations/{id}": {
+      "get": {
+        "summary": "Consultar reserva",
+        "description": "Consultar reserva",
+        "tags": [
+          "Reservas"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "patch": {
+        "summary": "Actualizar reserva",
+        "description": "Actualizar reserva",
+        "tags": [
+          "Reservas"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "status": "Cancelada",
+                "notes": "Cancelada por el huésped"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Actualizar reserva",
+        "description": "Actualizar reserva",
+        "tags": [
+          "Reservas"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "status": "Cancelada"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Eliminar reserva si no tiene factura",
+        "description": "Eliminar reserva si no tiene factura",
+        "tags": [
+          "Reservas"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/reservations/{id}/services": {
+      "post": {
+        "summary": "Agregar servicio a una reserva",
+        "description": "Agregar servicio a una reserva",
+        "tags": [
+          "Reservas"
+        ],
+        "responses": {
+          "201": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "serviceId": "UUID_SERVICIO",
+                "quantity": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/services": {
+      "get": {
+        "summary": "Listar servicios adicionales",
+        "description": "Listar servicios adicionales",
+        "tags": [
+          "Servicios"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "active",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "true o false"
+          }
+        ]
+      },
+      "post": {
+        "summary": "Crear servicio adicional (administración)",
+        "description": "Crear servicio adicional (administración)",
+        "tags": [
+          "Servicios"
+        ],
+        "responses": {
+          "201": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "name": "Desayuno",
+                "description": "Desayuno por persona",
+                "price": 28000,
+                "active": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/services/{id}": {
+      "get": {
+        "summary": "Consultar servicio",
+        "description": "Consultar servicio",
+        "tags": [
+          "Servicios"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "patch": {
+        "summary": "Actualizar servicio (administración)",
+        "description": "Actualizar servicio (administración)",
+        "tags": [
+          "Servicios"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "price": 30000
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Actualizar servicio (administración)",
+        "description": "Actualizar servicio (administración)",
+        "tags": [
+          "Servicios"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "price": 30000
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Eliminar servicio (administración)",
+        "description": "Eliminar servicio (administración)",
+        "tags": [
+          "Servicios"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/invoices": {
+      "get": {
+        "summary": "Listar facturas",
+        "description": "Listar facturas",
+        "tags": [
+          "Facturación"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "paymentStatus",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Pendiente, Parcial o Pagada"
+          },
+          {
+            "name": "reservationId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "UUID de la reserva"
+          }
+        ]
+      },
+      "post": {
+        "summary": "Generar factura desde reserva",
+        "description": "Generar factura desde reserva",
+        "tags": [
+          "Facturación"
+        ],
+        "responses": {
+          "201": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "reservationId": "UUID_RESERVA"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/invoices/{id}": {
+      "get": {
+        "summary": "Consultar factura",
+        "description": "Consultar factura",
+        "tags": [
+          "Facturación"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/invoices/{id}/payments": {
+      "post": {
+        "summary": "Registrar pago o abono",
+        "description": "Registrar pago o abono",
+        "tags": [
+          "Pagos"
+        ],
+        "responses": {
+          "201": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "amount": 10000,
+                "method": "Transferencia",
+                "reference": "TRX-2026-001"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/maintenance": {
+      "get": {
+        "summary": "Listar solicitudes de mantenimiento",
+        "description": "Listar solicitudes de mantenimiento",
+        "tags": [
+          "Mantenimiento"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Abierta, En proceso, Resuelta o Cancelada"
+          }
+        ]
+      },
+      "post": {
+        "summary": "Crear solicitud de mantenimiento",
+        "description": "Crear solicitud de mantenimiento",
+        "tags": [
+          "Mantenimiento"
+        ],
+        "responses": {
+          "201": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "roomId": "UUID_HABITACION",
+                "area": "Habitación",
+                "description": "Revisar aire acondicionado",
+                "priority": "Alta"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/maintenance/{id}": {
+      "get": {
+        "summary": "Consultar solicitud de mantenimiento",
+        "description": "Consultar solicitud de mantenimiento",
+        "tags": [
+          "Mantenimiento"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "patch": {
+        "summary": "Actualizar solicitud de mantenimiento",
+        "description": "Actualizar solicitud de mantenimiento",
+        "tags": [
+          "Mantenimiento"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "status": "En proceso",
+                "notes": "Asignada al técnico"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Actualizar solicitud de mantenimiento",
+        "description": "Actualizar solicitud de mantenimiento",
+        "tags": [
+          "Mantenimiento"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "status": "Resuelta"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reports/summary": {
+      "get": {
+        "summary": "Consultar indicadores de gerencia",
+        "description": "Consultar indicadores de gerencia",
+        "tags": [
+          "Reportes"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operación exitosa"
+          },
+          "400": {
+            "description": "Solicitud inválida"
+          },
+          "401": {
+            "description": "Token ausente o inválido"
+          },
+          "404": {
+            "description": "Recurso no encontrado"
+          },
+          "409": {
+            "description": "Conflicto de reglas del negocio"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Token obtenido de POST /api/auth/login."
+      }
+    }
+  }
+}

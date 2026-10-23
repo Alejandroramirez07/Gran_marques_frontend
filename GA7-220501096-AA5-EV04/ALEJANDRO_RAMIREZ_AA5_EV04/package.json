@@ -1,0 +1,15 @@
+{
+  "name": "hotel-gran-marques-api",
+  "version": "2.1.0",
+  "private": true,
+  "description": "API REST para el Sistema de Gestión Hotelera Hotel Gran Marques — Evidencia GA7-220501096-AA5-EV04",
+  "main": "api/server.js",
+  "scripts": {
+    "start": "node api/server.js",
+    "dev": "node --watch api/server.js",
+    "test": "node scripts/api-test.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

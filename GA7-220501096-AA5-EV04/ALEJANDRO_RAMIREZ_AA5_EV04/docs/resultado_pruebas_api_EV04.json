@@ -1,0 +1,307 @@
+{
+  "generatedAt": "2026-10-19T04:21:34.464Z",
+  "baseUrl": "http://127.0.0.1:3012",
+  "total": 36,
+  "passed": 36,
+  "failed": 0,
+  "results": [
+    {
+      "name": "Estado de API",
+      "method": "GET",
+      "route": "/api/health",
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "passed": true,
+      "message": "Servicio disponible."
+    },
+    {
+      "name": "Respuesta de salud incluye success=true",
+      "expectedStatus": "validación",
+      "actualStatus": "OK",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "Login administración demo",
+      "method": "POST",
+      "route": "/api/auth/login",
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "passed": true,
+      "message": "Autenticación satisfactoria."
+    },
+    {
+      "name": "El login de administración devuelve token",
+      "expectedStatus": "validación",
+      "actualStatus": "OK",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "Consultar perfil con token",
+      "method": "GET",
+      "route": "/api/auth/me",
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "passed": true,
+      "message": "Perfil consultado."
+    },
+    {
+      "name": "El perfil tiene rol administrativo",
+      "expectedStatus": "validación",
+      "actualStatus": "OK",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "Registrar usuario API",
+      "method": "POST",
+      "route": "/api/auth/register",
+      "expectedStatus": 201,
+      "actualStatus": 201,
+      "passed": true,
+      "message": "Usuario registrado satisfactoriamente."
+    },
+    {
+      "name": "Iniciar sesión usuario recién registrado",
+      "method": "POST",
+      "route": "/api/auth/login",
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "passed": true,
+      "message": "Autenticación satisfactoria."
+    },
+    {
+      "name": "El usuario registrado obtiene token",
+      "expectedStatus": "validación",
+      "actualStatus": "OK",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "Rechazar contraseña incorrecta",
+      "method": "POST",
+      "route": "/api/auth/login",
+      "expectedStatus": 401,
+      "actualStatus": 401,
+      "passed": true,
+      "message": "Error en la autenticación."
+    },
+    {
+      "name": "Crear huésped",
+      "method": "POST",
+      "route": "/api/guests",
+      "expectedStatus": 201,
+      "actualStatus": 201,
+      "passed": true,
+      "message": "Huésped creado."
+    },
+    {
+      "name": "El huésped creado tiene identificador",
+      "expectedStatus": "validación",
+      "actualStatus": "OK",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "Buscar huésped por documento",
+      "method": "GET",
+      "route": "/api/guests?q=1792383694126_2485",
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "passed": true,
+      "message": "Huéspedes consultados."
+    },
+    {
+      "name": "La búsqueda devuelve el huésped nuevo",
+      "expectedStatus": "validación",
+      "actualStatus": "OK",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "Consultar catálogo de habitaciones",
+      "method": "GET",
+      "route": "/api/rooms",
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "passed": true,
+      "message": "Habitaciones consultadas."
+    },
+    {
+      "name": "El catálogo contiene habitación disponible",
+      "expectedStatus": "validación",
+      "actualStatus": "OK",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "Crear reserva",
+      "method": "POST",
+      "route": "/api/reservations",
+      "expectedStatus": 201,
+      "actualStatus": 201,
+      "passed": true,
+      "message": "Reserva creada."
+    },
+    {
+      "name": "La reserva calcula las noches",
+      "expectedStatus": "validación",
+      "actualStatus": "OK",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "Evitar reserva duplicada en mismo rango",
+      "method": "POST",
+      "route": "/api/reservations",
+      "expectedStatus": 409,
+      "actualStatus": 409,
+      "passed": true,
+      "message": "La habitación ya tiene una reserva para ese rango de fechas."
+    },
+    {
+      "name": "Consultar reserva por identificador",
+      "method": "GET",
+      "route": "/api/reservations/741419cb-f282-44ef-b757-dd1c06fc57d0",
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "passed": true,
+      "message": "Operación realizada correctamente."
+    },
+    {
+      "name": "Consultar servicios adicionales",
+      "method": "GET",
+      "route": "/api/services?active=true",
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "passed": true,
+      "message": "Servicios consultados."
+    },
+    {
+      "name": "Existe servicio adicional activo",
+      "expectedStatus": "validación",
+      "actualStatus": "OK",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "Agregar consumo a reserva",
+      "method": "POST",
+      "route": "/api/reservations/741419cb-f282-44ef-b757-dd1c06fc57d0/services",
+      "expectedStatus": 201,
+      "actualStatus": 201,
+      "passed": true,
+      "message": "Servicio agregado a la reserva."
+    },
+    {
+      "name": "El consumo queda vinculado a la reserva",
+      "expectedStatus": "validación",
+      "actualStatus": "OK",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "Generar factura desde reserva",
+      "method": "POST",
+      "route": "/api/invoices",
+      "expectedStatus": 201,
+      "actualStatus": 201,
+      "passed": true,
+      "message": "Factura generada desde la reserva."
+    },
+    {
+      "name": "La factura tiene total positivo",
+      "expectedStatus": "validación",
+      "actualStatus": "OK",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "Evitar dos facturas para la misma reserva",
+      "method": "POST",
+      "route": "/api/invoices",
+      "expectedStatus": 409,
+      "actualStatus": 409,
+      "passed": true,
+      "message": "La reserva ya tiene una factura."
+    },
+    {
+      "name": "Registrar abono parcial",
+      "method": "POST",
+      "route": "/api/invoices/9def02f6-0fea-4bca-88de-6d4e0bf129a7/payments",
+      "expectedStatus": 201,
+      "actualStatus": 201,
+      "passed": true,
+      "message": "Pago registrado."
+    },
+    {
+      "name": "El abono deja estado parcial cuando corresponde",
+      "expectedStatus": "validación",
+      "actualStatus": "OK",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "Crear solicitud de mantenimiento",
+      "method": "POST",
+      "route": "/api/maintenance",
+      "expectedStatus": 201,
+      "actualStatus": 201,
+      "passed": true,
+      "message": "Solicitud de mantenimiento creada."
+    },
+    {
+      "name": "Actualizar estado de mantenimiento",
+      "method": "PATCH",
+      "route": "/api/maintenance/607d2c8d-dcdd-4870-aa7d-c155b0ae2f5e",
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "passed": true,
+      "message": "Solicitud de mantenimiento actualizada."
+    },
+    {
+      "name": "Consultar resumen gerencial",
+      "method": "GET",
+      "route": "/api/reports/summary",
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "passed": true,
+      "message": "Resumen gerencial generado."
+    },
+    {
+      "name": "El reporte contiene indicadores",
+      "expectedStatus": "validación",
+      "actualStatus": "OK",
+      "passed": true,
+      "message": ""
+    },
+    {
+      "name": "Bloquear creación de habitaciones a recepción",
+      "method": "POST",
+      "route": "/api/rooms",
+      "expectedStatus": 403,
+      "actualStatus": 403,
+      "passed": true,
+      "message": "Solo administración puede crear habitaciones."
+    },
+    {
+      "name": "Crear habitación con administración",
+      "method": "POST",
+      "route": "/api/rooms",
+      "expectedStatus": 201,
+      "actualStatus": 201,
+      "passed": true,
+      "message": "Habitación creada."
+    },
+    {
+      "name": "Rechazar acceso sin token",
+      "method": "GET",
+      "route": "/api/guests",
+      "expectedStatus": 401,
+      "actualStatus": 401,
+      "passed": true,
+      "message": "Se requiere Authorization: Bearer <token>."
+    }
+  ]
+}
