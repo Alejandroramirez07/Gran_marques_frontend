@@ -1,0 +1,21 @@
+EVIDENCIA GA8-220501096-AA1-EV02 - RESULTADOS DE VALIDACION
+Proyecto: Sistema de Gestión Hotelera - Hotel Gran Marques
+Aprendiz: Alejandro Ramírez Herrera | C.C. 1036966567 | Ficha 3235881
+Fecha de verificación: 30 de octubre de 2026
+Runtime de verificación: Node.js v22.16.0 en entorno de construcción.
+Runtime informado por el aprendiz: Node.js v24.22.1 en Git Bash.
+
+1. PRUEBAS UNITARIAS
+Comando: node --test tests/*.test.js
+Resultado: 6 aprobadas, 0 fallidas.
+Cobertura: mapeo/adaptación de habitaciones, huéspedes, reservas, servicios, facturas y mantenimiento.
+
+2. PRUEBAS DE INTEGRACIÓN HTTP
+Condición: servidor activo mediante node api/server.js en localhost:3000.
+Comando: node scripts/api-test.js
+Resultado: 36 aprobadas, 0 fallidas.
+Cobertura: salud, autenticación, registro, perfil, huéspedes, habitaciones, reservas, conflictos, servicios, facturación, pagos, mantenimiento, reportes y roles.
+
+TOTAL: 42 comprobaciones automatizadas aprobadas, 0 fallidas.
+
+Las pruebas son locales y automatizadas. No sustituyen acta firmada, aceptación formal con el cliente, pruebas de carga ni auditoría de seguridad productiva.

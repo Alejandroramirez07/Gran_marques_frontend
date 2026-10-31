@@ -1,0 +1,43 @@
+digraph HotelPackages {
+  graph [rankdir=LR, compound=true, bgcolor="white", pad="0.25", nodesep="0.35", ranksep="0.55", label="Diagrama de paquetes - Hotel Gran Marques", labelloc=t, fontsize=18, fontname="Arial"];
+  node [shape=box, style="rounded,filled", fontname="Arial", fontsize=10, color="#16365C", fillcolor="#F5F8FC", margin="0.15,0.1"];
+  edge [color="#416789", penwidth=1.3, arrowsize=0.75, fontname="Arial", fontsize=9];
+  subgraph cluster_front {
+    label="Paquete cliente web"; color="#6A8CAF"; style="rounded";
+    html [label="index.html\nEstructura de vistas"];
+    css [label="css/styles.css\nIdentidad visual"];
+    app [label="js/app.js\nControlador de interfaz"];
+    adapters [label="js/domain-adapters.js\nMapeo de entidades"];
+    client [label="js/api-client.js\nHTTP, token y errores"];
+    auth [label="js/services/auth-service.js\nLogin y perfil"];
+    hotel [label="js/services/hotel-service.js\nServicios de negocio"];
+  }
+  subgraph cluster_api {
+    label="Paquete servidor API"; color="#4F8C69"; style="rounded";
+    server [label="api/server.js\nServidor HTTP / router"];
+    authdomain [label="Autenticación y autorización"];
+    guests [label="Huéspedes"];
+    rooms [label="Habitaciones"];
+    reservations [label="Reservas y consumos"];
+    billing [label="Facturación y pagos"];
+    maintenance [label="Mantenimiento y reportes"];
+  }
+  subgraph cluster_data {
+    label="Paquete persistencia"; color="#A76B6B"; style="rounded";
+    users [shape=cylinder,label="users.json"];
+    hoteldata [shape=cylinder,label="hotel.json"];
+  }
+  subgraph cluster_quality {
+    label="Paquete calidad y documentación"; color="#8B78AD"; style="rounded";
+    tests [label="tests/domain-adapters.test.js\nPruebas unitarias"];
+    integration [label="scripts/api-test.js\nPruebas integración"];
+    docs [label="docs/\nOpenAPI, endpoints y arquitectura"];
+    postman [label="postman/\nColección y ambiente"];
+  }
+  html -> app; css -> html [style=dashed, label="presenta"];
+  app -> client; app -> adapters; app -> auth; app -> hotel;
+  auth -> client; hotel -> client; client -> server [label="HTTP/JSON"];
+  server -> authdomain; server -> guests; server -> rooms; server -> reservations; server -> billing; server -> maintenance;
+  authdomain -> users; guests -> hoteldata; rooms -> hoteldata; reservations -> hoteldata; billing -> hoteldata; maintenance -> hoteldata;
+  tests -> adapters [style=dashed]; integration -> server [style=dashed]; postman -> server [style=dashed]; docs -> server [style=dotted];
+}

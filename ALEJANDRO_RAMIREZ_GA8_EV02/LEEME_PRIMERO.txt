@@ -1,0 +1,22 @@
+LEAME PRIMERO - GA8-220501096-AA1-EV02 - MODULOS INTEGRADOS
+
+Aprendiz: Alejandro Ramírez Herrera
+C.C.: 1036966567
+Ficha: 3235881
+Proyecto: Sistema de Gestión Hotelera - Hotel Gran Marques
+
+1. Extraiga la carpeta ALEJANDRO_RAMIREZ_GA8_EV02.
+2. Instale Node.js 18 o superior y Git.
+3. Copie .env.example como .env y cambie JWT_SECRET por un secreto local privado.
+4. Abra Git Bash en esta carpeta y ejecute: node api/server.js
+5. Abra http://localhost:3000 para la aplicación.
+6. Compruebe el servicio en http://localhost:3000/api/health.
+7. Pruebas unitarias: node --test tests/*.test.js
+8. Pruebas de integración: mantenga el servidor abierto y, en otra terminal, ejecute node scripts/api-test.js
+9. Construcción de distribución: node scripts/build.js (genera dist/).
+10. Consulte docs/Documentacion_Modulos_Integrados_GA8-220501096-AA1-EV02.pdf y docs/MANUAL_TECNICO_EV02.md.
+
+La distribución dist/ no es un binario nativo .exe: es el paquete web ejecutable con Node.js.
+No se incluye .env ni datos personales de usuarios de prueba.
+La plantilla de acta de aprobación está pendiente de firma por los interesados.
+La URL pública de despliegue está pendiente de ser proporcionada; se incluyen URLs locales.

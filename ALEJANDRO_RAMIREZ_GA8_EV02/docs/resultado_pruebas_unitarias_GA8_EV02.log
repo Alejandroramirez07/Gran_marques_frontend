@@ -1,0 +1,46 @@
+TAP version 13
+# Subtest: mapRoom conserva identificador, número, capacidad y tarifa
+ok 1 - mapRoom conserva identificador, número, capacidad y tarifa
+  ---
+  duration_ms: 1.868508
+  type: 'test'
+  ...
+# Subtest: mapGuest convierte datos de huésped a modelo de interfaz
+ok 2 - mapGuest convierte datos de huésped a modelo de interfaz
+  ---
+  duration_ms: 0.181693
+  type: 'test'
+  ...
+# Subtest: mapReservation relaciona habitación, huésped, noches y consumos
+ok 3 - mapReservation relaciona habitación, huésped, noches y consumos
+  ---
+  duration_ms: 0.256195
+  type: 'test'
+  ...
+# Subtest: mapService normaliza precio y descripción
+ok 4 - mapService normaliza precio y descripción
+  ---
+  duration_ms: 0.168423
+  type: 'test'
+  ...
+# Subtest: mapInvoice calcula alojamiento, servicios y saldo
+ok 5 - mapInvoice calcula alojamiento, servicios y saldo
+  ---
+  duration_ms: 0.261803
+  type: 'test'
+  ...
+# Subtest: mapMaintenance resuelve ubicación a partir de la habitación relacionada
+ok 6 - mapMaintenance resuelve ubicación a partir de la habitación relacionada
+  ---
+  duration_ms: 0.1466
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 65.480211

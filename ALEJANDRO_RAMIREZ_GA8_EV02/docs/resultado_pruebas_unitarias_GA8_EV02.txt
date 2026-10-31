@@ -1,0 +1,5 @@
+PRUEBAS UNITARIAS - GA8-220501096-AA1-EV02
+Comando: node --test tests/*.test.js
+Resultado verificado: 6 pruebas aprobadas, 0 fallidas.
+Componentes: mapRoom, mapGuest, mapReservation, mapService, mapInvoice y mapMaintenance.
+El detalle TAP se encuentra en resultado_pruebas_unitarias_GA8_EV02.log.

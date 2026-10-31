@@ -1,0 +1,14 @@
+digraph HotelLayers {
+  graph [rankdir=LR, bgcolor="white", pad="0.25", nodesep="0.30", ranksep="0.45", label="Arquitectura por capas - Hotel Gran Marques", labelloc=t, fontsize=18, fontname="Arial"];
+  node [shape=box, style="rounded,filled", fontname="Arial", fontsize=10, margin="0.18,0.12", color="#16365C", fillcolor="#EEF4FA"];
+  edge [color="#416789", penwidth=1.4, arrowsize=0.75, fontname="Arial", fontsize=9];
+  user [label="Usuario\nRecepción | Administración | Gerencia", fillcolor="#FFF4DC", color="#B58A2A"];
+  ui [label="CAPA DE PRESENTACIÓN\nindex.html | css/styles.css\napp.js: vistas y navegación"];
+  client [label="CAPA DE INTEGRACIÓN CLIENTE\napi-client.js | auth-service.js\nhotel-service.js | domain-adapters.js", fillcolor="#E6F2FF"];
+  api [label="CAPA DE SERVICIOS / API REST\napi/server.js\nRutas HTTP, validación, autorización y respuestas JSON", fillcolor="#E8F5EA", color="#39734D"];
+  domains [label="MÓDULOS DE DOMINIO\nAutenticación | Huéspedes | Habitaciones\nReservas | Servicios | Facturación/Pagos\nMantenimiento | Reportes", fillcolor="#F2EAFE", color="#7053A6"];
+  persistence [shape=cylinder, label="CAPA DE PERSISTENCIA\napi/data/users.json\napi/data/hotel.json", fillcolor="#FCECEC", color="#A64C4C"];
+  user -> ui -> client -> api -> domains -> persistence;
+  tests [label="CAPA DE VALIDACIÓN\nPruebas unitarias de adaptadores\nPruebas de integración API\nPostman / scripts de prueba", fillcolor="#E8F4F4", color="#397C7B"];
+  tests -> api [style=dashed, label="solicitudes HTTP"];
+}

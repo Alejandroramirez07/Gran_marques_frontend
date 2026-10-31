@@ -1,0 +1,22 @@
+EVIDENCIA GA8-220501096-AA1-EV02 - MODULOS INTEGRADOS
+Aprendiz: Alejandro Ramírez Herrera
+C.C.: 1036966567
+Programa: Tecnologia en Analisis y Desarrollo de Software (ADSO)
+Ficha: 3235881
+Proyecto: Sistema de Gestion Hotelera - Hotel Gran Marques
+Fecha: 30 de octubre de 2026
+
+Productos incluidos:
+- Codigo fuente HTML, CSS, JavaScript y API REST.
+- Distribucion compilada/ensamblada en dist/ (no es binario nativo .exe).
+- Documentacion PDF y manuales por modulo/componente.
+- Matriz de entradas y salidas, arquitectura y diagramas.
+- Resultados de 6 pruebas unitarias y 36 de integracion.
+- Configuracion de servidor, almacenamiento y ambientes.
+- Enlace al repositorio GitHub y comandos de versionamiento.
+- Plantilla de acta de aprobacion de requisitos pendiente de firma.
+
+URL local: http://localhost:3000/
+URL API: http://localhost:3000/api
+Repositorio: https://github.com/Alejandroramirez07/Gran_marques_frontend
+URL de despliegue publico: pendiente; no se suministro una URL de hosting.

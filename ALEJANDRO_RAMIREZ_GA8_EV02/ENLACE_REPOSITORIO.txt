@@ -1,0 +1,24 @@
+EVIDENCIA GA8-220501096-AA1-EV02 - MODULOS INTEGRADOS
+Aprendiz: Alejandro Ramírez Herrera
+C.C.: 1036966567
+Ficha: 3235881
+
+Repositorio del proyecto:
+https://github.com/Alejandroramirez07/Gran_marques_frontend
+
+Ruta prevista del paquete dentro del repositorio:
+ALEJANDRO_RAMIREZ_GA8_EV02/
+
+Nota: el repositorio remoto fue compartido por el aprendiz durante la actividad. La inclusión del paquete EV02 en la rama remota debe confirmarse después de ejecutar git add, git commit y git push.
+
+URL local de la aplicación (requiere servidor encendido):
+http://localhost:3000/
+
+URL local de API:
+http://localhost:3000/api
+
+Endpoint de salud:
+http://localhost:3000/api/health
+
+URL pública de despliegue:
+PENDIENTE. No se ha aportado una URL de hosting pública para esta evidencia; localhost no es una dirección pública.
