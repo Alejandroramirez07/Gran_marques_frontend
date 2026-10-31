@@ -1,0 +1,26 @@
+digraph HotelDomain {
+  graph [rankdir=LR, bgcolor="white", pad="0.25", nodesep="0.45", ranksep="0.65", label="Modelo de dominio - Sistema de Gestión Hotelera", labelloc=t, fontsize=18, fontname="Arial"];
+  node [shape=record, style="filled", fontname="Arial", fontsize=9, color="#16365C", fillcolor="#F5F8FC", margin="0.12,0.08"];
+  edge [color="#416789", penwidth=1.3, arrowsize=0.75, fontname="Arial", fontsize=9];
+  User [label="{Usuario|id\nnombre\nusuario\ncorreo\nrol|login()\nconsultarPerfil()}"];
+  Guest [label="{Huésped|id\nnombre\ndocumento\ncorreo\nteléfono|registrar()\nactualizar()}"];
+  Room [label="{Habitación|id\nnúmero\ntipo\ncapacidad\ntarifa\nestado|consultarDisponibilidad()\nactualizarEstado()}"];
+  Reservation [label="{Reserva|id\ncheckIn\ncheckOut\nnoches\nestado|calcularNoches()\nconfirmar()\ncancelar()}"];
+  Service [label="{Servicio|id\nnombre\ndescripción\nprecio\nactivo|consultar()\nactualizar()}"];
+  Consumption [label="{ConsumoServicio|id\ncantidad\nprecioUnitario\ntotal|calcularTotal()}"];
+  Invoice [label="{Factura|id\nnúmero\nsubtotal\nimpuesto\ntotal\nestadoPago|generar()\ncalcularSaldo()}"];
+  Payment [label="{Pago|id\nvalor\nmétodo\nreferencia\nfecha|registrar()}"];
+  Maintenance [label="{SolicitudMantenimiento|id\nárea\ndescripción\nprioridad\nestado|crear()\nactualizarEstado()}"];
+  Report [label="{ReporteGerencial|fechaGeneración\nocupación\nreservas\nrecaudo|generarResumen()}"];
+  User -> Reservation [label="registra", taillabel="1", headlabel="0..*"];
+  Guest -> Reservation [label="realiza", taillabel="1", headlabel="0..*"];
+  Room -> Reservation [label="se asigna a", taillabel="1", headlabel="0..*"];
+  Reservation -> Consumption [label="incluye", taillabel="1", headlabel="0..*"];
+  Service -> Consumption [label="origina", taillabel="1", headlabel="0..*"];
+  Reservation -> Invoice [label="genera", taillabel="1", headlabel="0..1"];
+  Invoice -> Payment [label="recibe", taillabel="1", headlabel="0..*"];
+  Room -> Maintenance [label="puede requerir", taillabel="0..1", headlabel="0..*"];
+  Report -> Reservation [style=dashed, label="consolida"];
+  Report -> Invoice [style=dashed, label="consolida"];
+  Report -> Maintenance [style=dashed, label="consolida"];
+}

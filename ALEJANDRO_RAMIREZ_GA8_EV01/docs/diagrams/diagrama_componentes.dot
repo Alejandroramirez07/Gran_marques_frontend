@@ -1,0 +1,19 @@
+digraph HotelComponents {
+  graph [rankdir=LR, bgcolor="white", pad="0.25", nodesep="0.45", ranksep="0.7", label="Diagrama de componentes - Hotel Gran Marques", labelloc=t, fontsize=18, fontname="Arial"];
+  node [shape=component, style="filled", fontname="Arial", fontsize=10, color="#16365C", fillcolor="#EEF4FA", margin="0.18,0.12"];
+  edge [color="#416789", penwidth=1.4, arrowsize=0.75, fontname="Arial", fontsize=9];
+  user [shape=box, style="rounded,filled", label="Actor\nUsuario del hotel", fillcolor="#FFF4DC", color="#B58A2A"];
+  frontend [label="Aplicación web\nHTML + CSS + app.js"];
+  auth [label="Componente de autenticación\nauth-service.js"];
+  apiClient [label="Componente cliente API\napi-client.js"];
+  hotelSvc [label="Componente servicios hotel\nhotel-service.js"];
+  adapters [label="Componente adaptadores\ndomain-adapters.js"];
+  backend [label="Servidor REST\napi/server.js"];
+  authApi [label="Servicio Auth / JWT"];
+  hotelApi [label="Servicios de dominio\nGuests, Rooms, Reservations\nServices, Invoices, Maintenance"];
+  reporting [label="Servicio de reportes"];
+  storage [shape=cylinder, label="Almacén JSON\nusers.json / hotel.json", fillcolor="#FCECEC", color="#A64C4C"];
+  quality [label="Pruebas y documentación\nNode test / Postman / OpenAPI", fillcolor="#E8F4F4", color="#397C7B"];
+  user -> frontend; frontend -> auth; frontend -> hotelSvc; frontend -> adapters; auth -> apiClient; hotelSvc -> apiClient; apiClient -> backend [label="REST / JSON"];
+  backend -> authApi; backend -> hotelApi; backend -> reporting; authApi -> storage; hotelApi -> storage; reporting -> storage; quality -> backend [style=dashed, label="verifica"];
+}

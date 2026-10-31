@@ -1,0 +1,21 @@
+EVIDENCIA GA8-220501096-AA1-EV01 - RESULTADOS DE VALIDACIÓN
+Proyecto: Sistema de Gestión Hotelera - Hotel Gran Marques
+Ejecución de referencia: 30 de octubre de 2026 (hora Colombia)
+
+1. Pruebas unitarias de adaptadores
+Comando: node --test tests/*.test.js
+Resultado: 6 pruebas aprobadas, 0 fallidas.
+Cobertura funcional: conversión de habitaciones, huéspedes, reservas, servicios, facturas y solicitudes de mantenimiento al modelo de presentación.
+
+2. Pruebas de integración HTTP
+Condición previa: servidor iniciado con node api/server.js en localhost:3000.
+Comando: node scripts/api-test.js
+Resultado: 36 comprobaciones aprobadas, 0 fallidas.
+Cobertura: estado de API, autenticación y token, registro, huésped, catálogo de habitaciones, reserva, prevención de conflictos, servicios adicionales, factura, pagos, mantenimiento, reportes y permisos por rol.
+
+3. Verificación de recursos estáticos
+Se verificó que el servidor responde HTTP 200 al entregar la página principal, CSS, controlador de interfaz, cliente HTTP, adaptadores y servicios de autenticación y hotel.
+
+TOTAL: 42 comprobaciones automatizadas aprobadas (6 unitarias + 36 de integración), 0 fallidas.
+
+Nota: las pruebas se ejecutan en Node.js local contra la API HTTP. No sustituyen una prueba de aceptación con usuarios finales ni una auditoría de seguridad de producción. La validación visual del navegador se debe completar en el equipo del aprendiz.
