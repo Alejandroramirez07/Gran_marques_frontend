@@ -1,0 +1,10 @@
+# Use this workspace to collaborate
+workspace:
+  id: f55639a6-471f-474f-88f6-35391c1e835f
+
+localResources:
+  collections:
+    - ../Hotel_Gran_Marques_API_EV04.postman_collection.json
+    - ../Hotel Gran Marques — API EV04
+  environments:
+    - ../Hotel Gran Marques API Local EV04.environment.yaml

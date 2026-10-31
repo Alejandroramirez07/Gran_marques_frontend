@@ -1,0 +1,4 @@
+name: Hotel Gran Marques API Local EV04
+values:
+  - key: baseUrl
+    value: 'http://localhost:3000'

@@ -1,0 +1,11 @@
+$kind: http-request
+description: 04 - Consultar perfil autenticado
+url: "{{baseUrl}}/api/auth/me"
+method: GET
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('HTTP 200 esperado', function () { pm.response.to.have.status(200); });
+      const j=pm.response.json(); pm.test('Perfil administrativo',()=>pm.expect(j.data.user.role).to.eql('Administración'));
+    language: text/javascript
+order: 5000

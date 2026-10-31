@@ -1,0 +1,22 @@
+$kind: http-request
+description: 02 - Verificar rechazo de contraseña incorrecta
+url: "{{baseUrl}}/api/auth/login"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "username": "admin",
+      "password": "incorrecta-por-prueba"
+    }
+auth:
+  type: noauth
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('HTTP 401 esperado', function () { pm.response.to.have.status(401); });
+      const j=pm.response.json(); pm.test('Mensaje de autenticación controlado',()=>pm.expect(j.message).to.include('autenticación'));
+    language: text/javascript
+order: 3000

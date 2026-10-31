@@ -1,0 +1,11 @@
+$kind: http-request
+description: 18 - Consultar indicadores de gerencia
+url: "{{baseUrl}}/api/reports/summary"
+method: GET
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('HTTP 200 esperado', function () { pm.response.to.have.status(200); });
+      const j=pm.response.json(); pm.test('Reporte incluye reservas y habitaciones',()=>{pm.expect(j.data.rooms).to.be.a('number');pm.expect(j.data.reservationsTotal).to.be.a('number');});
+    language: text/javascript
+order: 19000

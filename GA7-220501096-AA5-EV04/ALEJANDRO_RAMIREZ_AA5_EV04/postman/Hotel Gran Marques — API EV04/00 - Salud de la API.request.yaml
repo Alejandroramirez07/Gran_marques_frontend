@@ -1,0 +1,25 @@
+$kind: http-request
+description: 00 - Salud de la API
+url: "{{baseUrl}}/api/health"
+method: GET
+auth:
+  type: noauth
+scripts:
+  - type: beforeRequest
+    code: |-
+      const suffix = Date.now().toString() + Math.floor(Math.random()*1000).toString();
+      pm.collectionVariables.set('runSuffix', suffix);
+      pm.collectionVariables.set('testUsername', 'ev03_' + suffix);
+      pm.collectionVariables.set('testEmail', 'ev03_' + suffix + '@hotel.test');
+      pm.collectionVariables.set('testPassword', 'HotelPostman2026!');
+      const start = new Date(); start.setUTCDate(start.getUTCDate() + 75 + Math.floor(Math.random()*500));
+      const end = new Date(start); end.setUTCDate(end.getUTCDate()+2);
+      pm.collectionVariables.set('checkIn', start.toISOString().slice(0,10));
+      pm.collectionVariables.set('checkOut', end.toISOString().slice(0,10));
+    language: text/javascript
+  - type: afterResponse
+    code: |-
+      pm.test('HTTP 200 esperado', function () { pm.response.to.have.status(200); });
+      const j=pm.response.json(); pm.test('Servicio saludable',()=>pm.expect(j.data.status).to.eql('ok'));
+    language: text/javascript
+order: 1000

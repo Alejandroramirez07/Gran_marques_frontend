@@ -1,0 +1,25 @@
+$kind: collection
+description: Colección Postman para la evidencia GA7-220501096-AA5-EV04. Ejecutar en orden con el servidor local activo. Ver docs/POSTMAN_Como_Probar_EV04.md y docs/ENDPOINTS_API_EV04.txt.
+variables:
+  baseUrl: http://localhost:3000
+  token: ""
+  tokenReception: ""
+  guestId: ""
+  roomId: ""
+  serviceId: ""
+  reservationId: ""
+  invoiceId: ""
+  maintenanceId: ""
+  newRoomId: ""
+  runSuffix: ""
+  checkIn: ""
+  checkOut: ""
+  testUsername: ""
+  testEmail: ""
+  testPassword: HotelPostman2026!
+auth:
+  - id: 72fd7e30-48cf-4bc9-a502-563359a0a319
+    type: bearer
+    name: bearer auth
+    credentials:
+      token: "{{token}}"

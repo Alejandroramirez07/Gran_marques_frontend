@@ -1,0 +1,24 @@
+$kind: http-request
+description: 19 - Crear habitación como administrador
+url: "{{baseUrl}}/api/rooms"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "number": "T{{runSuffix}}",
+      "type": "Sencilla",
+      "capacity": 1,
+      "rate": 90000,
+      "status": "Disponible",
+      "description": "Habitación de prueba Postman"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('HTTP 201 esperado', function () { pm.response.to.have.status(201); });
+      const j=pm.response.json(); pm.collectionVariables.set('newRoomId',j.data.room.id);
+    language: text/javascript
+order: 20000

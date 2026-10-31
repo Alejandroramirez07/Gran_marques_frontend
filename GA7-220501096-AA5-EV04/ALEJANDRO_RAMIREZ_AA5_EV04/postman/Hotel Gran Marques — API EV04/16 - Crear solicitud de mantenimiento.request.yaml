@@ -1,0 +1,22 @@
+$kind: http-request
+description: 16 - Crear solicitud de mantenimiento
+url: "{{baseUrl}}/api/maintenance"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "roomId": "{{roomId}}",
+      "area": "Habitación",
+      "description": "Revisión generada en colección Postman",
+      "priority": "Media"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('HTTP 201 esperado', function () { pm.response.to.have.status(201); });
+      const j=pm.response.json(); pm.collectionVariables.set('maintenanceId',j.data.item.id);
+    language: text/javascript
+order: 17000

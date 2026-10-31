@@ -1,0 +1,23 @@
+$kind: http-request
+description: 05 - Crear huésped
+url: "{{baseUrl}}/api/guests"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Huésped Postman EV03",
+      "document": "CC-{{runSuffix}}",
+      "email": "guest_{{runSuffix}}@hotel.test",
+      "phone": "3000000000",
+      "nationality": "Colombiana"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('HTTP 201 esperado', function () { pm.response.to.have.status(201); });
+      const j=pm.response.json(); pm.collectionVariables.set('guestId',j.data.guest.id); pm.test('UUID del huésped creado',()=>pm.expect(j.data.guest.id).to.be.a('string'));
+    language: text/javascript
+order: 6000

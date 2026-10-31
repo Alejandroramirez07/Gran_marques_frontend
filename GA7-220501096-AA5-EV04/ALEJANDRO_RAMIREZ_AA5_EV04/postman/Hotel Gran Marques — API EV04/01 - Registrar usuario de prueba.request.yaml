@@ -1,0 +1,24 @@
+$kind: http-request
+description: 01 - Registrar usuario de prueba
+url: "{{baseUrl}}/api/auth/register"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Usuario Postman EV03",
+      "username": "{{testUsername}}",
+      "email": "{{testEmail}}",
+      "password": "{{testPassword}}"
+    }
+auth:
+  type: noauth
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('HTTP 201 esperado', function () { pm.response.to.have.status(201); });
+      const j=pm.response.json(); pm.test('Usuario registrado',()=>pm.expect(j.data.user.id).to.be.a('string'));
+    language: text/javascript
+order: 2000

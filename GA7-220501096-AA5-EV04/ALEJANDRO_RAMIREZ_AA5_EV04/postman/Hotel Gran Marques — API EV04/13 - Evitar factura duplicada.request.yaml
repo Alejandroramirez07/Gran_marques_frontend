@@ -1,0 +1,19 @@
+$kind: http-request
+description: 13 - Evitar factura duplicada
+url: "{{baseUrl}}/api/invoices"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "reservationId": "{{reservationId}}"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('HTTP 409 esperado', function () { pm.response.to.have.status(409); });
+      const j=pm.response.json(); pm.test('Duplicado informado',()=>pm.expect(j.message).to.include('factura'));
+    language: text/javascript
+order: 14000

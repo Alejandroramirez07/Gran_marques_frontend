@@ -1,0 +1,11 @@
+$kind: http-request
+description: 07 - Consultar habitaciones disponibles
+url: "{{baseUrl}}/api/rooms?status=Disponible"
+method: GET
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('HTTP 200 esperado', function () { pm.response.to.have.status(200); });
+      const j=pm.response.json(); const r=j.data.items.find(x=>x.status==='Disponible'); pm.test('Existe habitación disponible',()=>pm.expect(r).to.exist); if(r) pm.collectionVariables.set('roomId',r.id);
+    language: text/javascript
+order: 8000

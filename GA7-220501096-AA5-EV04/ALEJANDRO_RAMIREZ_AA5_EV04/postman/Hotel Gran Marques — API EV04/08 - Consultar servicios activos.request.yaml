@@ -1,0 +1,11 @@
+$kind: http-request
+description: 08 - Consultar servicios activos
+url: "{{baseUrl}}/api/services?active=true"
+method: GET
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('HTTP 200 esperado', function () { pm.response.to.have.status(200); });
+      const j=pm.response.json(); const s=j.data.items.find(x=>x.active); pm.test('Existe servicio activo',()=>pm.expect(s).to.exist); if(s) pm.collectionVariables.set('serviceId',s.id);
+    language: text/javascript
+order: 9000

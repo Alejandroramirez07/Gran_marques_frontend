@@ -1,0 +1,20 @@
+$kind: http-request
+description: 17 - Actualizar mantenimiento
+url: "{{baseUrl}}/api/maintenance/{{maintenanceId}}"
+method: PATCH
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "status": "En proceso",
+      "notes": "Solicitud asignada durante la prueba"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('HTTP 200 esperado', function () { pm.response.to.have.status(200); });
+      const j=pm.response.json(); pm.test('Estado actualizado',()=>pm.expect(j.data.item.status).to.eql('En proceso'));
+    language: text/javascript
+order: 18000

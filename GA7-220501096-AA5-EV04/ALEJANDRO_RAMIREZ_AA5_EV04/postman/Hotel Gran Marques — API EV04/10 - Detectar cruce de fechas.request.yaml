@@ -1,0 +1,23 @@
+$kind: http-request
+description: 10 - Detectar cruce de fechas
+url: "{{baseUrl}}/api/reservations"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "guestId": "{{guestId}}",
+      "roomId": "{{roomId}}",
+      "checkIn": "{{checkIn}}",
+      "checkOut": "{{checkOut}}",
+      "guestsCount": 1
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('HTTP 409 esperado', function () { pm.response.to.have.status(409); });
+      const j=pm.response.json(); pm.test('Conflicto de disponibilidad comunicado',()=>pm.expect(j.message).to.include('reserva'));
+    language: text/javascript
+order: 11000

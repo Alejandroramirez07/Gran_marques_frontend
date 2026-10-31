@@ -1,0 +1,11 @@
+$kind: http-request
+description: 06 - Listar huéspedes
+url: "{{baseUrl}}/api/guests?q={{runSuffix}}"
+method: GET
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('HTTP 200 esperado', function () { pm.response.to.have.status(200); });
+      const j=pm.response.json(); pm.test('Lista de huéspedes',()=>pm.expect(j.data.items).to.be.an('array'));
+    language: text/javascript
+order: 7000

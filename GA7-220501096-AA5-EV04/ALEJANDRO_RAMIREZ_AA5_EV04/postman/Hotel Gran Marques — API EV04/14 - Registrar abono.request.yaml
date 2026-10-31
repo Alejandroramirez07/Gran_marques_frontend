@@ -1,0 +1,21 @@
+$kind: http-request
+description: 14 - Registrar abono
+url: "{{baseUrl}}/api/invoices/{{invoiceId}}/payments"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "amount": 10000,
+      "method": "Transferencia",
+      "reference": "TRX-{{runSuffix}}"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test('HTTP 201 esperado', function () { pm.response.to.have.status(201); });
+      const j=pm.response.json(); pm.test('Saldo no negativo',()=>pm.expect(j.data.balance).to.be.at.least(0));
+    language: text/javascript
+order: 15000
